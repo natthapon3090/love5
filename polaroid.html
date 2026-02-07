@@ -8,38 +8,46 @@
 
 <style>
 /* ===============================
-   🔧 FINAL SIZE FIX (BALANCED)
+   📱 MOBILE COMPACT SIZE
 =============================== */
 .card{
-  width: clamp(340px, 92vw, 400px) !important;
-  margin: 0 auto !important;
+  width: clamp(300px, 86vw, 360px) !important;
+  margin: 12px auto !important;
+  padding: 18px 16px 20px !important;
 }
 
 /* =============================== */
 .scratch-wrap{
   position:relative;
   width:100%;
-  margin-top:14px;
+  margin-top:12px;
 }
 
 .photo{
   width:100%;
-  border-radius:18px;
+  border-radius:14px;
   display:block;
-  box-shadow:0 20px 40px rgba(0,0,0,.25);
+  box-shadow:0 14px 28px rgba(0,0,0,.22);
 }
 
 canvas{
   position:absolute;
   inset:0;
-  border-radius:18px;
+  border-radius:14px;
   touch-action:none;
 }
 
 .hint{
   text-align:center;
-  margin-top:10px;
+  margin-top:8px;
   color:#d94b8c;
+  font-size:13px;
+}
+
+/* ปุ่มให้กะทัดรัด */
+.btn{
+  margin-top:10px;
+  padding:12px 0;
   font-size:14px;
 }
 </style>
@@ -74,6 +82,7 @@ const images = [
   "512486_0.jpg",
   "512487_0.jpg"
 ];
+
 let index = Number(localStorage.getItem("polaroid")) || 0;
 
 const img = document.getElementById("photo");
@@ -93,7 +102,7 @@ img.onload = () => {
 
 /* ===== SCRATCH EASY ===== */
 let isDown = false;
-const BRUSH = 60;
+const BRUSH = 50; // 👈 ลดนิด ให้เนียนบนมือถือ
 
 function erase(x,y){
   ctx.beginPath();
@@ -127,5 +136,6 @@ document.getElementById("nextBtn").onclick = ()=>{
   }
 };
 </script>
+
 </body>
 </html>
