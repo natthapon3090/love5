@@ -8,47 +8,67 @@
 
 <style>
 /* ===============================
-   📱 MOBILE COMPACT SIZE
+   🖥️ DESKTOP / DEFAULT (เดิม)
 =============================== */
 .card{
-  width: clamp(300px, 86vw, 360px) !important;
-  margin: 12px auto !important;
-  padding: 18px 16px 20px !important;
+  width: clamp(340px, 92vw, 400px);
+  margin: 0 auto;
 }
 
-/* =============================== */
 .scratch-wrap{
   position:relative;
   width:100%;
-  margin-top:12px;
+  margin-top:14px;
 }
 
 .photo{
   width:100%;
-  border-radius:14px;
+  border-radius:18px;
   display:block;
-  box-shadow:0 14px 28px rgba(0,0,0,.22);
+  box-shadow:0 20px 40px rgba(0,0,0,.25);
 }
 
 canvas{
   position:absolute;
   inset:0;
-  border-radius:14px;
+  border-radius:18px;
   touch-action:none;
 }
 
 .hint{
   text-align:center;
-  margin-top:8px;
+  margin-top:10px;
   color:#d94b8c;
-  font-size:13px;
+  font-size:14px;
 }
 
-/* ปุ่มให้กะทัดรัด */
-.btn{
-  margin-top:10px;
-  padding:12px 0;
-  font-size:14px;
+/* ===============================
+   📱 MOBILE ONLY (เล็กลงอีก)
+=============================== */
+@media (max-width:480px){
+  .card{
+    width: 88vw;
+    padding: 14px 14px 16px;
+  }
+
+  .photo{
+    border-radius:12px;
+    box-shadow:0 12px 24px rgba(0,0,0,.2);
+  }
+
+  canvas{
+    border-radius:12px;
+  }
+
+  .hint{
+    font-size:12px;
+    margin-top:6px;
+  }
+
+  .btn{
+    padding:10px 0;
+    font-size:13px;
+  }
 }
 </style>
 </head>
@@ -73,7 +93,7 @@ canvas{
 <script src="effects.js"></script>
 
 <script>
-/* ===== 6 IMAGES ===== */
+/* ===== IMAGES ===== */
 const images = [
   "512482_0.jpg",
   "512483_0.jpg",
@@ -100,9 +120,9 @@ img.onload = () => {
   ctx.globalCompositeOperation = "destination-out";
 };
 
-/* ===== SCRATCH EASY ===== */
+/* ===== SCRATCH ===== */
 let isDown = false;
-const BRUSH = 50; // 👈 ลดนิด ให้เนียนบนมือถือ
+const BRUSH = 48;
 
 function erase(x,y){
   ctx.beginPath();
@@ -124,7 +144,7 @@ canvas.addEventListener("pointermove", e=>{
   erase(e.clientX - r.left, e.clientY - r.top);
 });
 
-/* ===== NEXT IMAGE ===== */
+/* ===== NEXT ===== */
 document.getElementById("nextBtn").onclick = ()=>{
   index++;
   if(index >= images.length){
