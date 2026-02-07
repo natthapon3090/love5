@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+
+<style>
+/* ===== LOVE COUNTER ===== */
+.love-counter{
+  margin:16px 0 6px;
+  padding:14px 10px;
+  text-align:center;
+  border-radius:18px;
+  background:
+    linear-gradient(180deg,#fff0f7,#ffe0ee);
+  box-shadow:
+    0 8px 20px rgba(255,160,200,.35);
+}
+
+.love-counter .title{
+  font-size:14px;
+  color:#a85a7b;
+  margin-bottom:6px;
+}
+
+.love-counter .time{
+  font-size:16px;
+  font-weight:600;
+  color:#7a2d4f;
+}
+
+.love-counter .small{
+  font-size:12px;
+  margin-top:4px;
+  color:#b06a8a;
+}
+
+/* ===== MENU LAYOUT ===== */
+.menu{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:16px;
+  margin-top:20px;
+}
+
+/* ===== MENU ITEM : SOFT & CUTE ===== */
+.menu-item{
+  position:relative;
+  padding:28px 14px 24px;
+  text-align:center;
+  font-size:16px;
+  font-weight:600;
+  border-radius:20px;
+  cursor:pointer;
+  color:#7a2d4f;
+  background:
+    linear-gradient(180deg,#fff6fb,#ffdbea);
+  box-shadow:
+    0 10px 24px rgba(255,170,205,.35);
+  transition:.3s ease;
+  overflow:hidden;
+}
+
+/* STICKER */
+.menu-item::after{
+  position:absolute;
+  top:-14px;
+  right:-14px;
+  font-size:30px;
+  transform:rotate(12deg);
+  filter:drop-shadow(0 6px 10px rgba(0,0,0,.15));
+}
+
+/* DIFFERENT STICKERS */
+.menu-item:nth-child(1)::after{ content:"💌"; }
+.menu-item:nth-child(2)::after{ content:"🧠"; }
+.menu-item:nth-child(3)::after{ content:"📸"; }
+.menu-item:nth-child(4)::after{ content:"🎵"; }
+.menu-item:nth-child(5)::after{ content:"🐶"; }
+.menu-item:nth-child(6)::after{ content:"💖"; }
+
+/* HOVER / TAP */
+.menu-item:hover,
+.menu-item:active{
+  transform:translateY(-6px) scale(1.03);
+  box-shadow:
+    0 16px 34px rgba(255,150,195,.45);
+}
+
+/* LAST ITEM FULL WIDTH */
+.menu-item:last-child{
+  grid-column:1/3;
+  font-size:18px;
+  background:
+    linear-gradient(180deg,#fff0f7,#ffc7de);
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <h1 class="type">บันทึกหัวใจของเรา 💗</h1>
+
+  <!-- 💕 LOVE COUNTER -->
+  <div class="love-counter">
+    <div class="title">เราคบกันมาแล้ว</div>
+    <div class="time" id="loveTime">—</div>
+    <div class="small">และยังนับต่อไปเรื่อย ๆ ✨</div>
+  </div>
+
+  <div class="menu">
+    <div class="menu-item" onclick="location.href='letter.html'">
+      สิ่งที่อยากจะบอกเธอ
+    </div>
+    <div class="menu-item" onclick="location.href='quiz.html'">
+      เกมรู้ใจเรา
+    </div>
+    <div class="menu-item" onclick="location.href='polaroid.html'">
+      ภาพวันวาน
+    </div>
+    <div class="menu-item" onclick="location.href='music.html'">
+      เสียงเพลงของเรา
+    </div>
+    <div class="menu-item" onclick="location.href='chocolate.html'">
+      สัตว์เลี้ยงของเรา
+    </div>
+    <div class="menu-item" onclick="location.href='final.html'">
+      กดดูเอาเอง
+    </div>
+    <div class="menu-item" onclick="location.href='puzzle.html'">
+  ต่อรูปความทรงจำ
+</div>
+
+  </div>
+</div>
+
+<script src="effects.js"></script>
+
+<script>
+/* =========================
+   💗 SET DATE HERE
+   ใส่วันเริ่มคบ (YYYY-MM-DD)
+========================= */
+const startDate = new Date("2023-07-07T00:00:00"); // ← แก้ตรงนี้
+
+function updateLoveTime(){
+  const now = new Date();
+  let diff = now - startDate;
+
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  diff %= (1000 * 60 * 60 * 24);
+
+  const hours = Math.floor(diff / (1000 * 60 * 60));
+  diff %= (1000 * 60 * 60);
+
+  const minutes = Math.floor(diff / (1000 * 60));
+  const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+  document.getElementById("loveTime").innerHTML =
+    `${days} วัน ${hours} ชม. ${minutes} นาที ${seconds} วินาที`;
+}
+
+updateLoveTime();
+setInterval(updateLoveTime, 1000);
+</script>
+
+</body>
+</html>

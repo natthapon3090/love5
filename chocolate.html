@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Magic Pet</title>
+<link rel="stylesheet" href="style.css">
+
+<style>
+/* ===== STAGE ===== */
+.stage{
+  position:relative;
+  width:260px;
+  height:260px;
+  margin:18px auto;
+  border-radius:26px;
+  background:linear-gradient(180deg,#fff0f7,#ffe1ef);
+  box-shadow:0 20px 40px rgba(255,150,190,.45);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+
+.pet{
+  font-size:90px;
+}
+.float{animation:float 3s ease-in-out infinite;}
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-10px)}
+}
+
+.eat{animation:eat .6s ease;}
+@keyframes eat{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.15)}
+  100%{transform:scale(1)}
+}
+
+.jump{animation:jump .6s ease;}
+@keyframes jump{
+  0%{transform:translateY(0)}
+  50%{transform:translateY(-20px)}
+  100%{transform:translateY(0)}
+}
+
+/* ===== STATUS ===== */
+.status{
+  display:flex;
+  justify-content:space-around;
+  margin:14px 0;
+  font-size:14px;
+  color:#7a2d4f;
+}
+
+/* ===== ACTION ===== */
+.action-menu{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin:14px 0;
+}
+.action-btn{
+  padding:14px 6px;
+  border:none;
+  border-radius:18px;
+  font-size:16px;
+  background:linear-gradient(180deg,#fff,#ffd6ea);
+  box-shadow:0 10px 20px rgba(255,140,180,.35);
+}
+.action-btn:active{transform:scale(.94)}
+
+.message{
+  text-align:center;
+  color:#6b2a45;
+  margin-top:10px;
+}
+
+/* ===== POPUP ===== */
+.popup{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+}
+.popup-box{
+  background:#fff;
+  padding:26px 22px;
+  border-radius:22px;
+  text-align:center;
+  max-width:300px;
+  animation:pop .4s ease;
+}
+@keyframes pop{
+  from{transform:scale(.7);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+.popup-box .emoji{
+  font-size:64px;
+}
+.popup-box p{
+  margin-top:12px;
+  color:#6b2a45;
+  font-size:16px;
+}
+.popup-box button{
+  margin-top:18px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <h1 class="type">สัตว์แห่งหัวใจ 🐾</h1>
+  <p class="type">ดูแลเขาให้มีความสุขที่สุด</p>
+
+  <div class="stage">
+    <div class="pet float" id="pet">🐶</div>
+  </div>
+
+  <div class="status">
+    <div>❤️ <span id="love">50</span></div>
+    <div>🍗 <span id="food">50</span></div>
+    <div>😊 <span id="happy">50</span></div>
+  </div>
+
+  <div class="action-menu">
+    <button class="action-btn" onclick="feed()">🍗 ให้อาหาร</button>
+    <button class="action-btn" onclick="play()">🎾 เล่น</button>
+    <button class="action-btn" onclick="hug()">🤍 กอด</button>
+  </div>
+
+  <div class="message" id="msg">เขากำลังรอความรักจากเธอ…</div>
+
+  <button class="btn" onclick="location.href='menu.html'">
+    ← กลับหน้าเมนู
+  </button>
+</div>
+
+<!-- POPUP -->
+<div class="popup" id="popup" onclick="closePopup()">
+  <div class="popup-box">
+    <div class="emoji" id="popEmoji"></div>
+    <p id="popText"></p>
+    <button class="btn">โอเค</button>
+  </div>
+</div>
+
+<script>
+let love=50, food=50, happy=50;
+let shown={love:false,food:false,happy:false};
+
+const pet=document.getElementById("pet");
+const msg=document.getElementById("msg");
+const popup=document.getElementById("popup");
+const popText=document.getElementById("popText");
+const popEmoji=document.getElementById("popEmoji");
+
+function update(){
+  love=Math.min(100,love);
+  food=Math.min(100,food);
+  happy=Math.min(100,happy);
+
+  document.getElementById("love").innerText=love;
+  document.getElementById("food").innerText=food;
+  document.getElementById("happy").innerText=happy;
+
+  if(food===100 && !shown.food){
+    shown.food=true;
+    pet.innerText="🐕‍🦺";
+    showPopup("🐕‍🦺","หมาอ้วนหมดแล้ว 🍖");
+  }
+  if(love===100 && !shown.love){
+    shown.love=true;
+    showPopup("💖","เธอก็ตั้งใจรักสัตว์เลี้ยงของเราเหมือนกันนะเนี่ย");
+  }
+  if(happy===100 && !shown.happy){
+    shown.happy=true;
+    showPopup("😊","น้องหมามีความสุขแล้ว เธอย่าลืมมีความสุขและยิ้มเยอะ ๆ นะ");
+  }
+}
+
+function showPopup(emoji,text){
+  popEmoji.innerText=emoji;
+  popText.innerText=text;
+  popup.style.display="flex";
+}
+
+function closePopup(){
+  popup.style.display="none";
+}
+
+function feed(){
+  food+=15; happy+=5;
+  pet.classList.add("eat");
+  setTimeout(()=>pet.classList.remove("eat"),600);
+  msg.innerText="น้องหมากำลังกินอย่างเอร็ดอร่อย 🍗";
+  update();
+}
+
+function play(){
+  happy+=15; food-=5;
+  pet.classList.add("jump");
+  setTimeout(()=>pet.classList.remove("jump"),600);
+  msg.innerText="น้องหมากระโดดเล่นอย่างสนุก 🐾";
+  update();
+}
+
+function hug(){
+  love+=15; happy+=8;
+  msg.innerText="น้องหมาซบเธอเบา ๆ 🤍";
+  update();
+}
+</script>
+
+</body>
+</html>

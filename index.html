@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pastel Dream</title>
+<link rel="stylesheet" href="style.css">
+
+<style>
+/* ===== BACKGROUND LAYERS ===== */
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at top,#fff8fc,#ffe6f2 45%,#ffd4ea);
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* floating pastel blobs */
+.blob{
+  position:fixed;
+  width:260px;
+  height:260px;
+  border-radius:50%;
+  filter:blur(40px);
+  opacity:.45;
+  animation:blobMove 18s ease-in-out infinite;
+}
+.blob.pink{
+  background:#ffb3d5;
+  top:10%;
+  left:5%;
+}
+.blob.peach{
+  background:#ffd6c9;
+  bottom:15%;
+  right:10%;
+  animation-delay:6s;
+}
+@keyframes blobMove{
+  0%,100%{transform:translate(0,0)}
+  50%{transform:translate(40px,-30px)}
+}
+
+/* ===== FLOATING STICKERS ===== */
+.sticker{
+  position:fixed;
+  font-size:28px;
+  animation:floatSticker 9s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes floatSticker{
+  0%,100%{transform:translateY(0) rotate(0deg)}
+  50%{transform:translateY(-22px) rotate(12deg)}
+}
+
+/* ===== CARD ===== */
+.card-dream{
+  width:clamp(320px,90vw,420px);
+  background:
+    linear-gradient(180deg,#ffffff,#fff5fb);
+  border-radius:32px;
+  padding:34px 28px 40px;
+  box-shadow:
+    0 40px 80px rgba(255,150,200,.55),
+    inset 0 0 0 1px rgba(255,255,255,.6);
+  position:relative;
+  animation:cardFloat 6s ease-in-out infinite;
+  overflow:hidden;
+}
+@keyframes cardFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-10px)}
+}
+
+/* shine */
+.card-dream::before{
+  content:"";
+  position:absolute;
+  inset:-60%;
+  background:
+    linear-gradient(120deg,transparent 45%,rgba(255,255,255,.6),transparent 55%);
+  animation:shine 8s linear infinite;
+}
+@keyframes shine{
+  from{transform:translateX(-100%) rotate(25deg)}
+  to{transform:translateX(100%) rotate(25deg)}
+}
+
+/* ===== TEXT ===== */
+.title{
+  font-size:26px;
+  color:#c94c85;
+}
+.subtitle{
+  margin-top:6px;
+  font-size:14px;
+  color:#a85a7b;
+}
+
+.divider{
+  width:70%;
+  height:2px;
+  margin:22px auto;
+  background:
+    linear-gradient(90deg,transparent,#ffc2dc,transparent);
+}
+
+.story{
+  font-size:14px;
+  line-height:1.9;
+  color:#7a3b56;
+  min-height:100px;
+}
+
+/* ===== BUTTON ===== */
+.open-btn{
+  margin-top:26px;
+  width:100%;
+  padding:15px 0;
+  border:none;
+  border-radius:22px;
+  font-size:15px;
+  font-weight:600;
+  color:white;
+  background:
+    linear-gradient(135deg,#ff9fc9,#ffc3de);
+  box-shadow:
+    0 16px 36px rgba(255,150,200,.6);
+  cursor:pointer;
+}
+.open-btn:active{
+  transform:scale(.96);
+}
+</style>
+</head>
+
+<body>
+
+<!-- BACKGROUND BLOBS -->
+<div class="blob pink"></div>
+<div class="blob peach"></div>
+
+<!-- STICKERS -->
+<div class="sticker" style="top:12%;left:10%">💗</div>
+<div class="sticker" style="top:18%;right:14%;animation-delay:2s">🌸</div>
+<div class="sticker" style="bottom:18%;left:18%;animation-delay:4s">🎀</div>
+<div class="sticker" style="bottom:12%;right:20%;animation-delay:6s">🧸</div>
+
+<!-- MAIN CARD -->
+<div class="card-dream">
+  <div class="title">บันทึกของเรา 🌸</div>
+  <div class="subtitle">เขียนด้วยความรู้สึก</div>
+
+  <div class="divider"></div>
+
+  <div class="story" id="story"></div>
+
+  <button class="open-btn" onclick="location.href='lock.html'">
+    เปิดความทรงจำ 💕
+  </button>
+</div>
+
+<script>
+/* TYPEWRITER */
+const text = `
+บางความรู้สึก  
+ไม่ต้องดัง ไม่ต้องอธิบาย  
+แค่ค่อย ๆ เคลื่อนไหวอยู่ข้างใน  
+ก็เพียงพอแล้ว 💗
+`;
+
+let i = 0;
+const speed = 50;
+const target = document.getElementById("story");
+
+function type(){
+  if(i < text.length){
+    target.innerHTML += text.charAt(i);
+    i++;
+    setTimeout(type, speed);
+  }
+}
+type();
+</script>
+
+</body>
+</html>

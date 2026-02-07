@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+
+<style>
+.card{
+  width: clamp(340px, 92vw, 400px);
+  margin: 0 auto;
+}
+
+/* ================= HEART MOSAIC ================= */
+.heart-wrap{
+  display:flex;
+  justify-content:center;
+  margin:18px 0;
+  opacity:0;
+  transition:.6s ease;
+}
+.heart-wrap.show{opacity:1}
+
+.heart{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:6px;
+}
+
+.heart div{
+  width:44px;
+  height:44px;
+  background-size:cover;
+  background-position:center;
+  border-radius:4px;
+  opacity:0;
+  transform:scale(.4);
+  transition:.35s ease;
+  box-shadow:0 4px 10px rgba(0,0,0,.25);
+}
+
+/* CENTER HEART */
+.heart .center{
+  background:#e74c3c;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+}
+
+/* ===== HEART SHAPE + JPG IMAGE ===== */
+.heart div:nth-child(1){grid-column:2;background-image:url("512468.jpg")}
+.heart div:nth-child(2){grid-column:3;background-image:url("512468.jpg")}
+.heart div:nth-child(3){grid-column:5;background-image:url("512468.jpg")}
+.heart div:nth-child(4){grid-column:6;background-image:url("512468.jpg")}
+
+.heart div:nth-child(5){grid-column:1;background-image:url("512468.jpg")}
+.heart div:nth-child(6){grid-column:2;background-image:url("512468.jpg")}
+.heart div:nth-child(7){grid-column:3;background-image:url("512468.jpg")}
+.heart div:nth-child(8){grid-column:4;background-image:url("512468.jpg")}
+.heart div:nth-child(9){grid-column:5;background-image:url("512468.jpg")}
+.heart div:nth-child(10){grid-column:6;background-image:url("512468.jpg")}
+.heart div:nth-child(11){grid-column:7;background-image:url("512468.jpg")}
+
+.heart div:nth-child(12){grid-column:2;background-image:url("512468.jpg")}
+.heart div:nth-child(13){grid-column:3;background-image:url("512468.jpg")}
+.heart div:nth-child(14){grid-column:4;background-image:url("512468.jpg")}
+.heart div:nth-child(15){grid-column:5;background-image:url("512468.jpg")}
+.heart div:nth-child(16){grid-column:6;background-image:url("512468.jpg")}
+
+.heart div:nth-child(17){grid-column:3;background-image:url("512468.jpg")}
+.heart div:nth-child(18){grid-column:4;background-image:url("512468.jpg")}
+.heart div:nth-child(19){grid-column:5;background-image:url("512468.jpg")}
+
+.heart div:nth-child(20){grid-column:4;background-image:url("512468.jpg")}
+
+/* ================= SLIDESHOW ================= */
+.slideshow{
+  display:none;
+  position:relative;
+  width:100%;
+  height:220px;
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 14px 30px rgba(0,0,0,.35);
+}
+.slide{
+  position:absolute;
+  inset:0;
+  background-size:cover;
+  background-position:center;
+  opacity:0;
+  transition:1s ease;
+}
+.slide.active{opacity:1}
+
+/* ================= VOICE ================= */
+.voice{
+  background:linear-gradient(180deg,#6a63ff,#5a55f0);
+  border-radius:18px;
+  padding:14px 16px;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  box-shadow:0 14px 30px rgba(90,85,240,.45);
+  cursor:pointer;
+}
+.voice-play{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  background:rgba(255,255,255,.2);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* ===== BACK BUTTON ===== */
+.back-btn{
+  margin-top:10px;
+  width:100%;
+  padding:12px 0;
+  border:none;
+  border-radius:16px;
+  font-size:14px;
+  font-weight:600;
+  color:#6a63ff;
+  background:#f1f0ff;
+  box-shadow:0 6px 16px rgba(106,99,255,.25);
+}
+.back-btn:active{transform:scale(.96)}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <h1 class="type">เพลงของเรา 🎵</h1>
+  <p class="type">ความทรงจำค่อย ๆ รวมเป็นหัวใจ</p>
+
+  <!-- ❤️ HEART -->
+  <div class="heart-wrap" id="heartWrap">
+    <div class="heart">
+      <div></div><div></div><div></div><div></div>
+      <div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+      <div></div><div></div><div class="center">❤️</div><div></div><div></div>
+      <div></div><div></div><div></div>
+      <div></div>
+    </div>
+  </div>
+
+  <!-- 🖼 SLIDESHOW -->
+  <div class="slideshow" id="slideshow">
+    <div class="slide active" style="background-image:url('512482_0.jpg')"></div>
+    <div class="slide" style="background-image:url('512483_0.jpg')"></div>
+    <div class="slide" style="background-image:url('512484_0.jpg')"></div>
+    <div class="slide" style="background-image:url('512468.jpg')"></div>
+  </div>
+
+  <!-- 🎧 AUDIO -->
+  <audio id="audio">
+    <source src="Safeplanet ข้างกาย With You.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="voice" onclick="toggleVoice()">
+    <div class="voice-play" id="icon">▶️</div>
+    กดเพื่อเปิดเพลง
+  </div>
+
+  <button class="back-btn" onclick="location.href='menu.html'">
+    ← กลับหน้าเมนู
+  </button>
+</div>
+
+<script>
+const audio = document.getElementById("audio");
+const icon = document.getElementById("icon");
+const heartWrap = document.getElementById("heartWrap");
+const blocks = document.querySelectorAll(".heart div");
+const slideshow = document.getElementById("slideshow");
+
+let revealIndex = 0;
+let revealTimer = null;
+let slideshowTimer = null;
+let slideshowIndex = 0;
+
+function toggleVoice(){
+  if(audio.paused){
+    audio.play();
+    icon.innerText="⏸";
+    heartWrap.classList.add("show");
+    startReveal();
+  }else{
+    audio.pause();
+    icon.innerText="▶️";
+  }
+}
+
+function startReveal(){
+  if(revealTimer) return;
+
+  revealTimer = setInterval(()=>{
+    if(audio.paused) return;
+
+    if(revealIndex < blocks.length){
+      blocks[revealIndex].style.opacity = 1;
+      blocks[revealIndex].style.transform = "scale(1)";
+      revealIndex++;
+    }else{
+      clearInterval(revealTimer);
+      heartWrap.style.display="none";
+      slideshow.style.display="block";
+      startSlideshow();
+    }
+  },1500);
+}
+
+function startSlideshow(){
+  if(slideshowTimer) return;
+
+  slideshowTimer = setInterval(()=>{
+    if(audio.paused) return;
+
+    const slides = document.querySelectorAll(".slide");
+    slides[slideshowIndex].classList.remove("active");
+    slideshowIndex = (slideshowIndex + 1) % slides.length;
+    slides[slideshowIndex].classList.add("active");
+  },3500);
+}
+</script>
+
+</body>
+</html>

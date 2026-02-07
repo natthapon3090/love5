@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+
+<style>
+.card{
+  width: clamp(340px, 92vw, 400px);
+  margin: 0 auto;
+}
+
+/* ===== PUZZLE GRID ===== */
+.puzzle{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin:18px 0;
+}
+
+/* ===== PIECE ===== */
+.piece{
+  aspect-ratio:1/1;
+  background-image:url("512487_0.jpg");
+  background-size:300% 300%;
+  border-radius:14px;
+  box-shadow:0 6px 14px rgba(0,0,0,.25);
+  touch-action:none;
+  cursor:pointer;
+}
+
+/* ===== GHOST (ตามนิ้ว) ===== */
+.ghost{
+  position:fixed;
+  z-index:9999;
+  pointer-events:none;
+  border-radius:14px;
+  box-shadow:0 18px 36px rgba(0,0,0,.35);
+  transform:scale(1.05);
+}
+
+/* ===== POPUP ===== */
+.popup{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:20;
+}
+.popup.show{display:flex}
+
+.popup-box{
+  background:white;
+  border-radius:22px;
+  padding:18px;
+  width:90%;
+  max-width:320px;
+  text-align:center;
+  animation:pop .4s ease;
+}
+
+@keyframes pop{
+  from{transform:scale(.6);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+
+.popup-img{
+  width:100%;
+  border-radius:14px;
+  margin-bottom:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <h1 class="type">ต่อรูปความทรงจำ 🧩</h1>
+  <p class="type">ต่อรูปให้สำเร็จน้าคนเก่ง</p>
+
+  <div class="puzzle" id="puzzle"></div>
+
+  <button class="btn" onclick="history.back()">← กลับ</button>
+</div>
+
+<!-- RESULT -->
+<div class="popup" id="popup">
+  <div class="popup-box">
+    <img class="popup-img"
+      src="512487_0.jpg">
+    <p class="type">เราต่อรูปนี้สำเร็จแล้ว 💗</p>
+    <button class="btn" onclick="closePopup()">โอเค</button>
+  </div>
+</div>
+
+<script>
+const puzzle = document.getElementById("puzzle");
+const popup = document.getElementById("popup");
+
+/* ตำแหน่งที่ถูกต้อง */
+const correct = [
+  "0% 0%","50% 0%","100% 0%",
+  "0% 50%","50% 50%","100% 50%",
+  "0% 100%","50% 100%","100% 100%"
+];
+
+/* สุ่ม */
+const shuffled = [...correct].sort(()=>Math.random()-0.5);
+
+/* สร้างชิ้น */
+shuffled.forEach(pos=>{
+  const d = document.createElement("div");
+  d.className="piece";
+  d.style.backgroundPosition = pos;
+  puzzle.appendChild(d);
+});
+
+/* ===== DRAG EASY MODE ===== */
+let ghost = null;
+let fromPiece = null;
+let size = 0;
+
+puzzle.addEventListener("pointerdown",e=>{
+  if(!e.target.classList.contains("piece")) return;
+
+  fromPiece = e.target;
+  const rect = fromPiece.getBoundingClientRect();
+  size = rect.width;
+
+  // สร้าง ghost
+  ghost = document.createElement("div");
+  ghost.className = "ghost";
+  ghost.style.width = size+"px";
+  ghost.style.height = size+"px";
+  ghost.style.backgroundImage = fromPiece.style.backgroundImage;
+  ghost.style.backgroundSize = fromPiece.style.backgroundSize;
+  ghost.style.backgroundPosition = fromPiece.style.backgroundPosition;
+
+  document.body.appendChild(ghost);
+
+  moveGhost(e.clientX, e.clientY);
+  fromPiece.setPointerCapture(e.pointerId);
+});
+
+window.addEventListener("pointermove",e=>{
+  if(!ghost) return;
+  moveGhost(e.clientX, e.clientY);
+});
+
+window.addEventListener("pointerup",e=>{
+  if(!ghost) return;
+
+  const target = document.elementFromPoint(e.clientX, e.clientY);
+
+  if(target && target.classList.contains("piece") && target!==fromPiece){
+    const temp = fromPiece.style.backgroundPosition;
+    fromPiece.style.backgroundPosition = target.style.backgroundPosition;
+    target.style.backgroundPosition = temp;
+    checkWin();
+  }
+
+  ghost.remove();
+  ghost = null;
+  fromPiece = null;
+});
+
+/* ghost อยู่ตรงนิ้ว */
+function moveGhost(x,y){
+  ghost.style.left = (x - size/2) + "px";
+  ghost.style.top  = (y - size/2) + "px";
+}
+
+/* ===== CHECK WIN ===== */
+function checkWin(){
+  const pieces = document.querySelectorAll(".piece");
+  let ok = true;
+  pieces.forEach((p,i)=>{
+    if(p.style.backgroundPosition !== correct[i]) ok=false;
+  });
+  if(ok){
+    setTimeout(()=>popup.classList.add("show"),400);
+  }
+}
+
+function closePopup(){
+  popup.classList.remove("show");
+}
+</script>
+
+</body>
+</html>
