@@ -43,31 +43,40 @@ canvas{
 }
 
 /* ===============================
-   📱 MOBILE ONLY (เล็กลงอีก)
+   📱 MOBILE ONLY (เล็กลงอีกจริง)
 =============================== */
 @media (max-width:480px){
+
   .card{
-    width: 88vw;
-    padding: 14px 14px 16px;
+    width: 80vw;              /* 👈 แคบลงอีก */
+    padding: 12px;
+    margin: 4px auto;
+  }
+
+  .scratch-wrap{
+    margin-top: 6px;
   }
 
   .photo{
-    border-radius:12px;
-    box-shadow:0 12px 24px rgba(0,0,0,.2);
+    max-height: 42vh;         /* 👈 ตัวนี้แหละ แก้ปัญหาเต็มจอ */
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow:0 10px 20px rgba(0,0,0,.18);
   }
 
   canvas{
-    border-radius:12px;
+    max-height: 42vh;         /* 👈 ให้ canvas เท่ารูป */
+    border-radius: 12px;
   }
 
   .hint{
-    font-size:12px;
-    margin-top:6px;
+    font-size: 12px;
+    margin-top: 4px;
   }
 
   .btn{
-    padding:10px 0;
-    font-size:13px;
+    padding: 9px 0;
+    font-size: 13px;
   }
 }
 </style>
@@ -93,7 +102,6 @@ canvas{
 <script src="effects.js"></script>
 
 <script>
-/* ===== IMAGES ===== */
 const images = [
   "512482_0.jpg",
   "512483_0.jpg",
@@ -120,7 +128,6 @@ img.onload = () => {
   ctx.globalCompositeOperation = "destination-out";
 };
 
-/* ===== SCRATCH ===== */
 let isDown = false;
 const BRUSH = 48;
 
@@ -144,7 +151,6 @@ canvas.addEventListener("pointermove", e=>{
   erase(e.clientX - r.left, e.clientY - r.top);
 });
 
-/* ===== NEXT ===== */
 document.getElementById("nextBtn").onclick = ()=>{
   index++;
   if(index >= images.length){
